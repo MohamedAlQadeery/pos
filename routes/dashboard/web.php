@@ -8,9 +8,10 @@ Route::group(
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
     function () {
-        Route::group(['prefix' => 'dashboard'], function () {
+        Route::group(['prefix' => 'dashboard','middleware'=>'auth'], function () {
 
             Route::get('/', 'DashboardController@index')->name('dashboard.index');
+            Route::resource('users','UsersController');
 
         });
 

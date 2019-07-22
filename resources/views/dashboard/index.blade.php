@@ -14,7 +14,6 @@
 
             <ol class="breadcrumb">
                 <li><a href="# "><i class="fa fa-dashboard"></i> @lang('site.dashboard')</a></li>
-                <li class="active">@lang('site.users')</li>
             </ol>
 
         </section> <!-- end of content header section -->
