@@ -30,7 +30,7 @@
                 <div class="box-body">
                     @include('partials._errors')
                     {{--                @include('partials._session')--}}
-                    <form action="{{route('users.update',$user->id)}}" method="post">
+                    <form action="{{route('users.update',$user->id)}}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
 
@@ -46,6 +46,15 @@
                         <div class="form-group">
                             <label>@lang('site.email')</label>
                             <input type="email" name="email" class="form-control" value="{{$user->email}}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>@lang('site.image')</label>
+                            <input type="file" name="image" class="form-control image">
+                        </div>
+
+                        <div class="form-group">
+                            <img src="{{$user->image_path}}" class="img-thumbnail image-preview" style="width: 120px;">
                         </div>
 
 

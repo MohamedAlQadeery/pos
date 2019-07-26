@@ -6,6 +6,8 @@ use App\Http\Requests\Dashboard\Users\StoreRequest;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UsersController extends Controller
 {
@@ -51,9 +53,18 @@ class UsersController extends Controller
     public function store(StoreRequest $request)
     {
 
-        $request_data = $request->except(['password', 'password_confirmation', 'permissions']);
 
+        $request_data = $request->except(['password', 'password_confirmation', 'permissions','image']);
+
+        if($request->image){
+            Image::make($request->image)->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('/uploads/user_images/'.$request->image->hashName()));
+        }
+
+        $request_data['image']= $request->image->hashName();
         $request_data['password'] = bcrypt($request->input('password'));
+
 
         $user = User::create($request_data);
 
@@ -74,7 +85,25 @@ class UsersController extends Controller
             'email'=>'required|email'
         ]);
 
-        $user->update($request->except(['_token','_method','permissions']));
+        $request_data = $request->except(['permissions','image']);
+
+        if($request->image){
+
+           if($user->image !='default.png'){
+               Storage::disk('public_uploads')->delete('/user_images/'.$user->image);
+           }
+
+            Image::make($request->image)->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(public_path('/uploads/user_images/'.$request->image->hashName()));
+            $request_data['image']= $request->image->hashName();
+
+        }
+
+
+
+
+        $user->update($request_data);
 
         $user->syncPermissions($request->permissions);
         return redirect()->route('users.index')->with('success', __('site.edit_successfully'));
@@ -84,6 +113,9 @@ class UsersController extends Controller
 
 
     public function destroy(User $user){
+        if($user->image !='default.png'){
+            Storage::disk('public_uploads')->delete('/user_images/'.$user->image);
+        }
         $user->delete();
         return redirect()->route('users.index')->with('success', __('site.deleted_successfully'));
 

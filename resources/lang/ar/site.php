@@ -20,6 +20,7 @@ return [
     'deleted_successfully'=>'تم حذف البيانات بنجاح',
     'permissions'=>'الصلاحيات',
     'actions'=>'اكشن',
+    'image'=>'صورة',
 
     'no_data'=>'لا يوجد سجلات',
     'search'=>'ابحث',

@@ -31,7 +31,7 @@
                 <div class="box-body">
                     @include('partials._errors')
                     {{--                @include('partials._session')--}}
-                    <form action="{{route('users.store')}}" method="post">
+                    <form action="{{route('users.store')}}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group">
@@ -48,6 +48,15 @@
                             <input type="email" name="email" class="form-control">
                         </div>
 
+                        <div class="form-group">
+                            <label>@lang('site.image')</label>
+                            <input type="file" name="image" class="form-control image">
+                        </div>
+
+                        <div class="form-group">
+                            <img src="{{asset('uploads/user_images/default.png')}}" class="img-thumbnail image-preview" style="width: 120px;">
+                        </div>
+
 
                         <div class="form-group">
                             <label>@lang('site.password')</label>
@@ -59,6 +68,9 @@
                             <label>@lang('site.password_confirmation')</label>
                             <input type="password" name="password_confirmation" class="form-control">
                         </div>
+
+
+
 
 
                         <div class="form-group">
